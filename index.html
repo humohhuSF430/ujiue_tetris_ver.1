@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#111827" />
+  <title>BLOCK FEAST（仮）</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>BLOCK FEAST <small>（仮）</small></h1>
+      <p id="phaseLabel">初期設定</p>
+    </div>
+    <button id="openSettings" class="icon-btn" aria-label="設定">⚙️</button>
+  </header>
+
+  <main>
+    <section class="card status-card">
+      <div><span>抽選券</span><strong id="tickets">0</strong></div>
+      <div><span>現在地</span><strong id="areaName">未設定</strong></div>
+      <div><span>目標</span><strong id="goalText">準備中</strong></div>
+    </section>
+
+    <section class="game-wrap">
+      <canvas id="game" width="300" height="600" aria-label="ゲーム盤"></canvas>
+      <div class="side-panel">
+        <div class="mini-card">
+          <span>NEXT / DRAW</span>
+          <canvas id="preview" width="120" height="120"></canvas>
+          <strong id="pieceName">-</strong>
+        </div>
+        <button id="startPrep" class="primary">初期盤面づくり開始</button>
+        <button id="startQuest" class="primary hidden">この盤面で本編開始</button>
+        <button id="drawPiece" class="accent hidden">1枚で抽選</button>
+        <button id="drawExclude" class="secondary hidden">3枚で1種除外抽選</button>
+        <button id="placeAce" class="accent hidden">エースを選ぶ</button>
+      </div>
+    </section>
+
+    <section class="controls card">
+      <button data-action="left">◀</button>
+      <button data-action="rotate">↻</button>
+      <button data-action="right">▶</button>
+      <button data-action="down">▼</button>
+      <button data-action="drop" class="wide">一気に落とす</button>
+    </section>
+
+    <section class="card food-card">
+      <div class="section-title">
+        <div>
+          <h2>飲食記録</h2>
+          <p>飲み物は重複可／食べ物は同一エリア内で重複不可</p>
+        </div>
+        <button id="changeArea" class="secondary small">エリア変更</button>
+      </div>
+      <div class="food-form">
+        <select id="itemType">
+          <option value="drink">飲み物</option>
+          <option value="food">食べ物</option>
+        </select>
+        <input id="itemName" placeholder="例：コーヒー、たこ焼き" maxlength="30" />
+        <button id="addItem" class="accent">+1枚獲得</button>
+      </div>
+      <div id="foodWarning" class="warning"></div>
+      <ul id="itemLog"></ul>
+    </section>
+
+    <section class="card log-card">
+      <div class="section-title"><h2>抽選履歴</h2><button id="resetAll" class="danger small">全リセット</button></div>
+      <ul id="drawLog"></ul>
+    </section>
+  </main>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="dialog-card">
+      <h2>ゲーム設定</h2>
+      <label>初期の積み上がり段数
+        <select id="startRows">
+          <option value="5">5段</option><option value="10" selected>10段</option><option value="15">15段</option><option value="20">20段</option>
+        </select>
+      </label>
+      <label>エース枚数 <input id="aceCount" type="number" min="0" max="20" value="1" /></label>
+      <label>ジョーカー枚数 <input id="jokerCount" type="number" min="0" max="20" value="1" /></label>
+      <p class="hint">通常7種は各1枚。抽選ごとに山札を作り直します。</p>
+      <menu><button value="cancel" class="secondary">閉じる</button><button id="saveSettings" value="default" class="primary">保存</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="areaDialog">
+    <form method="dialog" class="dialog-card">
+      <h2>飲食エリアを変更</h2>
+      <input id="newAreaName" placeholder="例：1階フードコート" maxlength="30" />
+      <p class="hint">エリアを変えると、食べ物の重複制限がリセットされます。</p>
+      <menu><button value="cancel" class="secondary">キャンセル</button><button id="saveArea" value="default" class="primary">変更</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="choiceDialog">
+    <form method="dialog" class="dialog-card">
+      <h2 id="choiceTitle">ブロックを選択</h2>
+      <div id="pieceChoices" class="piece-choices"></div>
+      <button value="cancel" class="secondary full">キャンセル</button>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
